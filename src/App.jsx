@@ -187,6 +187,7 @@ export default function App() {
   const [filter, setFilter] = useState("all");
   const [stageFilter, setStageFilter] = useState("all");
   const [search, setSearch] = useState("");
+    const [partners, setPartners] = useState([]);
 
   const filtered = partners.filter(p => {
     if (filter !== "all" && p.phase !== filter) return false;
@@ -199,11 +200,6 @@ export default function App() {
   const activeRevShare = partners.filter(p => p.revenue_active).length;
 
   return (
-    if (partners.length === 0) return (
-  <div style={{padding:40, fontFamily:'monospace', fontSize:14}}>
-    Loading... check browser console for errors.
-  </div>
-);
 
     <div style={{ minHeight: "100vh", background: "#080808", color: "#f0f0f0", fontFamily: "'DM Sans', sans-serif" }}>
       <style>{`
