@@ -199,6 +199,12 @@ export default function App() {
   const activeRevShare = partners.filter(p => p.revenue_active).length;
 
   return (
+    if (partners.length === 0) return (
+  <div style={{padding:40, fontFamily:'monospace', fontSize:14}}>
+    Loading... check browser console for errors.
+  </div>
+);
+
     <div style={{ minHeight: "100vh", background: "#080808", color: "#f0f0f0", fontFamily: "'DM Sans', sans-serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500;700&display=swap');
