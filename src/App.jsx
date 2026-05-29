@@ -10,7 +10,7 @@ const STAGES = [
 ];
 
 const SUPABASE_URL = 'https://kkmgvmdjdijbovmhzwul.supabase.co/rest/v1/';   // from Step 1C
-const SUPABASE_KEY = 'sb_publishable_MsYyoAk2RuPz9r3hIUcfag_BKvPMBm5';               // from Step 1C
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtrbWd2bWRqZGlqYm92bWh6d3VsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMTczMjgsImV4cCI6MjA5NTU5MzMyOH0.smBFtagcKfd-8VRxv5CugcCpSRF8k-i1LgT7IjHUfEo';               // from Step 1C
  
 const [partners, setPartners] = useState([]);
  
