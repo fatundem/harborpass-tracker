@@ -16,14 +16,19 @@ const [partners, setPartners] = useState([]);
  
 useEffect(() => {
  fetch(`${SUPABASE_URL}/rest/v1/partners?select=*&order=id`, {
-   headers: {
-     apikey: SUPABASE_KEY,
-     Authorization: `Bearer ${SUPABASE_KEY}`
-   }
- })
- .then(res => res.json())
- .then(data => setPartners(data));
-}, []);
+  headers: {
+    apikey: SUPABASE_KEY,
+    Authorization: `Bearer ${SUPABASE_KEY}`
+  }
+})
+.then(res => res.json())
+.then(data => setPartners(data.map(p => ({
+  ...p,
+  revenueActive: p.revenue_active,
+  lastUpdate:    p.last_update,
+  useCase:       p.use_case,
+}))))
+
 
 const STAGE_IDX = Object.fromEntries(STAGES.map((s, i) => [s.id, i]));
 
