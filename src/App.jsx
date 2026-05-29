@@ -646,11 +646,12 @@ export default function App() {
 
           {/* Email hint */}
           <div style={{ marginTop: 32, padding: "14px 18px", background: "#0a0a0a", border: "1px dashed #1e1e1e", borderRadius: 8, display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ fontSize: 18 }}>✉️</div>
+              {/*    <div style={{ fontSize: 18 }}>✉️</div>      */}
             <div>
               <div style={{ fontSize: 11, color: "#555", fontFamily: "'DM Mono',monospace" }}>EMAIL UPDATES ACTIVE</div>
               <div style={{ fontSize: 11, color: "#333", marginTop: 2 }}>
                 {/*    Send <span style={{ color: "#1a5276", fontFamily: "'DM Mono',monospace" }}>Subject: HP Update: [Partner] &gt; [Stage] | [Phase integer]</span> from Gmail to trigger an update */}
+                              HarborPass 2026
               </div>
             </div>
           </div>
