@@ -27,8 +27,8 @@ useEffect(() => {
   revenueActive: p.revenue_active,
   lastUpdate:    p.last_update,
   useCase:       p.use_case,
-}))));
-
+}))))
+}
 
 const STAGE_IDX = Object.fromEntries(STAGES.map((s, i) => [s.id, i]));
 
