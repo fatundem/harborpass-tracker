@@ -650,7 +650,7 @@ export default function App() {
             <div>
               <div style={{ fontSize: 11, color: "#555", fontFamily: "'DM Mono',monospace" }}>EMAIL UPDATES ACTIVE</div>
               <div style={{ fontSize: 11, color: "#333", marginTop: 2 }}>
-                Send <span style={{ color: "#1a5276", fontFamily: "'DM Mono',monospace" }}>Subject: HP Update: [Partner] &gt; [Stage]</span> from Gmail to trigger an update
+                {/*    Send <span style={{ color: "#1a5276", fontFamily: "'DM Mono',monospace" }}>Subject: HP Update: [Partner] &gt; [Stage] | [Phase integer]</span> from Gmail to trigger an update */}
               </div>
             </div>
           </div>
