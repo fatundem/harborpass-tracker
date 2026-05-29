@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const STAGES = [
   { id: "sourced",    label: "Sourced",           desc: "Initial contact made" },
@@ -9,18 +9,21 @@ const STAGES = [
   { id: "live",       label: "Live",               desc: "Transacting — rev share active" },
 ];
 
-const PARTNERS = [
-  { id:1,  name:"Multigate",   market:"Nigeria / London",  corridor:"NG → US / EU",          useCase:"Cross-border disbursements",  phase:"0", stage:"live",        revenueActive:true,  lastUpdate:"2024-11-02", notes:"Fully live. Rev share active." },
-  { id:2,  name:"Vigipay",     market:"Nigeria",           corridor:"NG → US",               useCase:"B2B payment rails + wallet",  phase:"0", stage:"live",        revenueActive:true,  lastUpdate:"2024-11-10", notes:"Live and transacting." },
-  { id:3,  name:"MapleWave",   market:"USA",               corridor:"US domestic",           useCase:"B2B payment rails + wallet",  phase:"0", stage:"integration", revenueActive:false, lastUpdate:"2024-12-01", notes:"Tech integration underway." },
-  { id:4,  name:"Fidesic",     market:"Michigan, USA",     corridor:"US domestic",           useCase:"B2B payment rails + wallet",  phase:"0", stage:"diligence",   revenueActive:false, lastUpdate:"2024-12-08", notes:"KYB checklist submitted to Veem." },
-  { id:5,  name:"Busha / Send",market:"London",            corridor:"UK → NG / US",          useCase:"B2B payment rails + wallet",  phase:"0", stage:"commercial",  revenueActive:false, lastUpdate:"2024-12-15", notes:"Pricing discussion active with Veem." },
-  { id:6,  name:"GCash",       market:"Philippines",       corridor:"PH → US / MENA",        useCase:"Cross-border disbursements",  phase:"0", stage:"qualified",   revenueActive:false, lastUpdate:"2025-01-03", notes:"Decision-maker engaged. Awaiting commercial review." },
-  { id:7,  name:"Paga",        market:"Nigeria",           corridor:"NG → US / EU",          useCase:"B2B payment rails + wallet",  phase:"0", stage:"qualified",   revenueActive:false, lastUpdate:"2025-01-05", notes:"Qualified. Pending Veem commercial team engagement." },
-  { id:8,  name:"Afriex",      market:"Nigeria",           corridor:"NG → US / China",       useCase:"B2B payment rails + wallet",  phase:"0", stage:"sourced",     revenueActive:false, lastUpdate:"2025-01-08", notes:"Introduced. Initial meeting completed." },
-  { id:9,  name:"TaptapSend",  market:"Nigeria",           corridor:"NG → US",               useCase:"B2B payment rails + wallet",  phase:"1", stage:"sourced",     revenueActive:false, lastUpdate:"2025-01-10", notes:"Phase 1 pipeline. Outreach initiated." },
-  { id:10, name:"Stitch",      market:"Saudi Arabia",      corridor:"Middle East Operations",useCase:"B2B payment rails + wallet",  phase:"1", stage:"sourced",     revenueActive:false, lastUpdate:"2025-01-10", notes:"Phase 1 pipeline. Relationship building." },
-];
+const SUPABASE_URL = 'https://kkmgvmdjdijbovmhzwul.supabase.co/rest/v1/';   // from Step 1C
+const SUPABASE_KEY = 'sb_publishable_MsYyoAk2RuPz9r3hIUcfag_BKvPMBm5';               // from Step 1C
+ 
+const [partners, setPartners] = useState([]);
+ 
+useEffect(() => {
+ fetch(`${SUPABASE_URL}/rest/v1/partners?select=*&order=id`, {
+   headers: {
+     apikey: SUPABASE_KEY,
+     Authorization: `Bearer ${SUPABASE_KEY}`
+   }
+ })
+ .then(res => res.json())
+ .then(data => setPartners(data));
+}, []);
 
 const STAGE_IDX = Object.fromEntries(STAGES.map((s, i) => [s.id, i]));
 
@@ -183,15 +186,15 @@ export default function App() {
   const [stageFilter, setStageFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  const filtered = PARTNERS.filter(p => {
+  const filtered = partners.filter(p => {
     if (filter !== "all" && p.phase !== filter) return false;
     if (stageFilter !== "all" && p.stage !== stageFilter) return false;
     if (search && !p.name.toLowerCase().includes(search.toLowerCase()) && !p.market.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
-  const liveCount = PARTNERS.filter(p => p.stage === "live").length;
-  const activeRevShare = PARTNERS.filter(p => p.revenueActive).length;
+  const liveCount = partners.filter(p => p.stage === "live").length;
+  const activeRevShare = partners.filter(p => p.revenueActive).length;
 
   return (
     <div style={{ minHeight: "100vh", background: "#080808", color: "#f0f0f0", fontFamily: "'DM Sans', sans-serif" }}>
@@ -217,7 +220,7 @@ export default function App() {
           </div>
         </div>
         <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
-          {[["PARTNERS", PARTNERS.length, "#888"], ["LIVE", liveCount, "#4ae04a"], ["REV SHARE ACTIVE", activeRevShare, "#e8a820"]].map(([label, val, color]) => (
+          {[["PARTNERS", partners.length, "#888"], ["LIVE", liveCount, "#4ae04a"], ["REV SHARE ACTIVE", activeRevShare, "#e8a820"]].map(([label, val, color]) => (
             <div key={label} style={{ textAlign: "right" }}>
               <div style={{ fontSize: 18, fontWeight: 700, color, fontFamily: "'DM Mono',monospace" }}>{val}</div>
               <div style={{ fontSize: 9, color: "#333", letterSpacing: "0.08em" }}>{label}</div>
@@ -267,8 +270,8 @@ export default function App() {
           {/* Stage bar */}
           <div style={{ display: "flex", gap: 2, marginBottom: 24, borderRadius: 8, overflow: "hidden", height: 6 }}>
             {STAGES.map(s => {
-              const count = PARTNERS.filter(p => p.stage === s.id).length;
-              return <div key={s.id} style={{ flex: count / PARTNERS.length * 100, background: COLORS[s.id].accent, minWidth: count > 0 ? 2 : 0 }} title={`${s.label}: ${count}`} />;
+              const count = partners.filter(p => p.stage === s.id).length;
+              return <div key={s.id} style={{ flex: count / partners.length * 100, background: COLORS[s.id].accent, minWidth: count > 0 ? 2 : 0 }} title={`${s.label}: ${count}`} />;
             })}
           </div>
 
