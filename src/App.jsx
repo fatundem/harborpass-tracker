@@ -16,19 +16,16 @@ const [partners, setPartners] = useState([]);
  
 useEffect(() => {
  fetch(`${SUPABASE_URL}/rest/v1/partners?select=*&order=id`, {
-  headers: {
-    apikey: SUPABASE_KEY,
-    Authorization: `Bearer ${SUPABASE_KEY}`
-  }
-})
-.then(res => res.json())
-.then(data => setPartners(data.map(p => ({
-  ...p,
-  revenueActive: p.revenue_active,
-  lastUpdate:    p.last_update,
-  useCase:       p.use_case,
-}))))
-}
+   headers: {
+     apikey: SUPABASE_KEY,
+     Authorization: `Bearer ${SUPABASE_KEY}`
+   }
+ })
+ .then(res => res.json())
+ .then(data => setPartners(data));
+}, []);
+
+
 
 const STAGE_IDX = Object.fromEntries(STAGES.map((s, i) => [s.id, i]));
 
@@ -90,7 +87,7 @@ function PartnerCard({ partner, onClick, selected }) {
         position: "relative", overflow: "hidden"
       }}
     >
-      {partner.revenueActive && (
+      {partner.revenue_active && (
         <div style={{
           position: "absolute", top: 0, right: 0,
           background: "#4ae04a22", borderBottom: "1px solid #4ae04a44",
@@ -114,7 +111,7 @@ function PartnerCard({ partner, onClick, selected }) {
       <StageChip stage={partner.stage} />
       <ProgressBar stage={partner.stage} />
       <div style={{ marginTop: 10, fontSize: 11, color: "#333", fontFamily: "'DM Mono',monospace" }}>
-        Updated {partner.lastUpdate}
+        Updated {partner.last_update}
       </div>
     </div>
   );
@@ -169,15 +166,15 @@ function DetailPanel({ partner, onClose }) {
 
       <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: 16 }}>
         {[
-          ["USE CASE", partner.useCase],
+          ["USE CASE", partner.use_case],
           ["CORRIDOR", partner.corridor],
           ["PHASE", `Phase ${partner.phase}`],
-          ["REVENUE SHARE", partner.revenueActive ? "Active — 27.5% of net Veem economics" : "Not yet triggered"],
-          ["LAST UPDATE", partner.lastUpdate],
+          ["REVENUE SHARE", partner.revenue_active ? "Active — 27.5% of net Veem economics" : "Not yet triggered"],
+          ["LAST UPDATE", partner.last_update],
         ].map(([k, v]) => (
           <div key={k} style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{ fontSize: 10, color: "#444", fontFamily: "'DM Mono',monospace", letterSpacing: "0.07em" }}>{k}</span>
-            <span style={{ fontSize: 11, color: k === "REVENUE SHARE" && partner.revenueActive ? "#4ae04a" : "#888", fontFamily: "'DM Mono',monospace", textAlign: "right", maxWidth: "60%" }}>{v}</span>
+            <span style={{ fontSize: 11, color: k === "REVENUE SHARE" && partner.revenue_active ? "#4ae04a" : "#888", fontFamily: "'DM Mono',monospace", textAlign: "right", maxWidth: "60%" }}>{v}</span>
           </div>
         ))}
       </div>
@@ -199,7 +196,7 @@ export default function App() {
   });
 
   const liveCount = partners.filter(p => p.stage === "live").length;
-  const activeRevShare = partners.filter(p => p.revenueActive).length;
+  const activeRevShare = partners.filter(p => p.revenue_active).length;
 
   return (
     <div style={{ minHeight: "100vh", background: "#080808", color: "#f0f0f0", fontFamily: "'DM Sans', sans-serif" }}>
