@@ -419,6 +419,8 @@ function ProspectsPage() {
   fit_score: parseFloat(r.fit_score)||0,
   raise_usd: parseFloat(String(r.raise_usd).replace(/[$,]/g,''))||0,
 }));
+console.log('Headers:', Object.keys(rows[0]));
+console.log('Row 1:', rows[0]);
 
         setProspects(rows);
       } catch(e){setError(e.message);}
