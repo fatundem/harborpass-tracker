@@ -88,14 +88,39 @@ function parseCSVLine(line) {
   result.push(cur.trim());
   return result;
 }
+
+function normalizeHeader(h) {
+  return h.split('\n')[0].toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '').trim()
+    .replace(/\s+/g, '_');
+}
+
+const HEADER_REMAP = {
+  'in_hp_network':    'in_network',
+  'hp_selected':      'hp_selected',
+  'raise_usd':        'raise_usd',
+  'fit_score':        'fit_score',
+  'fit_score_max_100':'fit_score',
+  'corridor_score_max_25': 'corridor_score',
+  'volume_score_max_20':   'volume_score',
+  'series_score_max_20':   'series_score',
+  'regulatory_score_max_15':'regulatory_score',
+  'market_score_max_10':   'market_score',
+  'leadership_score_max_10':'leadership_score',
+};
+
 function parseCSV(text) {
   const lines = text.trim().split('\n').filter(l => l.trim());
-  const headers = parseCSVLine(lines[0]);
-  return lines.slice(1).map(line => {
+  const headers = parseCSVLine(lines[0]).map(h => {
+    const n = normalizeHeader(h);
+    return HEADER_REMAP[n] || n;
+  });
+  return lines.slice(1).filter(l => l.trim()).map(line => {
     const vals = parseCSVLine(line);
-    return Object.fromEntries(headers.map((h,i) => [h.trim(), (vals[i]||"").trim()]));
+    return Object.fromEntries(headers.map((h,i) => [h, (vals[i]||'').trim()]));
   });
 }
+
 
 // ── Auth helpers ──────────────────────────────────────────────────────────────
 function sbHeaders(token) {
