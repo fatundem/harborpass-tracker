@@ -7,7 +7,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 // Publish your Google Sheet as CSV:
 // File → Share → Publish to web → Sheet1 → CSV → Copy link
-const SHEETS_CSV_URL = "";  // paste your published CSV URL here
+const SHEETS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2vnKG-iTlRsMx9ecZZWBH8wjJ0TEXx2vFZlFs7-7-RV5rryKvmG5UObYa-GfxuQ/pub?gid=872247566&single=true&output=csv";  // paste your published CSV URL here
 // ─────────────────────────────────────────────────────────────────────────────
 
 const STAGES = [
@@ -466,7 +466,7 @@ function ProspectsPage() {
 
         {[["Country",countryFilter,setCountryFilter,countries],["Series",seriesFilter,setSeriesFilter,seriesOpts]].map(([label,val,setter,opts])=>(
           <select key={label} value={val} onChange={e=>setter(e.target.value)} style={{...inputStyle,cursor:"pointer"}}>
-            {opts.map(o=><option key={o} value={o}>{o==="All"?`All ${label}s`:o}</option>)}
+            {opts.map(o=><option key={o} value={o}>{o==="All"?(label==="Country"?"All Countries":label==="Series"?"All Series":`All ${label}s`):o}</option>)}
           </select>
         ))}
 
