@@ -91,9 +91,10 @@ function parseCSVLine(line) {
 
 function normalizeHeader(h) {
   return h.split('\n')[0].toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '').trim()
+    .replace(/[^a-z0-9\s_]/g, '').trim()
     .replace(/\s+/g, '_');
 }
+
 
 const HEADER_REMAP = {
   'in_hp_network':    'in_network',
