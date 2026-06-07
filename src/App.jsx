@@ -414,7 +414,12 @@ function ProspectsPage() {
         const res = await fetch(SHEETS_CSV_URL);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const text = await res.text();
-        const rows = parseCSV(text).map(r=>({...r,fit_score:parseInt(r.fit_score)||0,raise_usd:parseInt(r.raise_usd)||0}));
+        const rows = parseCSV(text).map(r=>({
+  ...r,
+  fit_score: parseFloat(r.fit_score)||0,
+  raise_usd: parseFloat(String(r.raise_usd).replace(/[$,]/g,''))||0,
+}));
+
         setProspects(rows);
       } catch(e){setError(e.message);}
       finally{setLoading(false);}
